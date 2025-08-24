@@ -9,7 +9,6 @@ const DashboardChat = () => {
   const messagesEndRef = useRef(null);
   const { register, handleSubmit, reset } = useForm();
 
-  // Scroll to bottom on new message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
