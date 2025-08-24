@@ -1,5 +1,5 @@
-# Project Name
-This repository contains the project source code.
+# Sanjeevani
+This project was developed as part of the **K1000 organized hackathon "Ignithon"**
 ---
 ## Working Snapshots
 You can view the working snapshots of the project here:  
