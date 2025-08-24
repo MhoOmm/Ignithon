@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import Typed from "typed.js";
 import Sdg3 from "../src/assets/sdg3.png";
 import FancyButton from "./FancyButton";
+import { NavLink } from "react-router";
+
 
 const Home = () => {
   const typedEl = useRef(null); // Reference for typed text
@@ -58,13 +60,15 @@ const Home = () => {
 
           {/* buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <FancyButton label="Talk to Bot" color="#6366F1" />
-            <FancyButton
+            <NavLink to=""><FancyButton label="Talk to Bot" color="#6366F1" /></NavLink>
+            <NavLink to="/riskform"><FancyButton
               label="Risk Checkup"
               color="#6366F1"
               text="black"
               backgroundColor="white"
-            />
+            /></NavLink>
+            
+            
           </div>
         </div>
       </div>

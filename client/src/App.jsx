@@ -1,14 +1,60 @@
-import './App.css'
-import UuidCard from '../components/UuidCard'
+import React from "react";
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from '../components/Navbar';
+import Home from '../components/Home';
+import Register from "../components/Register";
+import ChatAi from "../components/ChatAi";
+import RiskPredictorForm from "../components/RiskForm";
+import DashboardChat from "../components/DashboardChat";
+import ChatDesc from "../components/ChatDesc";
+
+
 
 function App() {
   return (
-    <>
-    <div>
-      <UuidCard></UuidCard>
-    </div>
-    </>
-  )
+    <Router>
+      <div className="h-screen w-full">
+        <Routes>
+          {/* Home route with Navbar */}
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar />
+                <Home />
+                <ChatDesc/>
+              </>
+            }
+          />
+
+          {/* Signup route */}
+          <Route path="/signup" element={<Register />} />
+
+          {/* Mindcare Chat route with Navbar */}
+          <Route
+            path="/mindcare"
+            element={
+              <>
+                <Navbar />
+                <ChatAi />
+              </>
+            }
+          />
+
+          <Route
+            path="/riskform"
+            element={
+              <>
+                <Navbar />
+                <RiskPredictorForm />
+              </>
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
