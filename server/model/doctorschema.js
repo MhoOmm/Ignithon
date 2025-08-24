@@ -3,7 +3,7 @@ const {Schema} = mongoose
 const doctorSchema = new Schema({
     user:{
         type:Schema.Types.ObjectId,
-        ref:"user",
+        ref:"User",
         required:true
     },
     specialization: { type: String,default:"" },

@@ -1,4 +1,4 @@
-// controllers/riskPredictor.controller.js
+// controllers/riskPredictor.controller.j
 
 const { computeAscvdTenYearRisk, categorizeRisk } = require('../middleware/riskPredictor');
 
@@ -7,18 +7,16 @@ const RiskPredictorInput = require('../model/riskpredictorSchema.js');
 exports.estimateRisk = async (req, res) => {
   try {
     const input = req.body;
-
-    // Call the middleware functions to compute risk and categorize it
     const { tenYearRiskPercent, modelUsed, debug } = computeAscvdTenYearRisk(input);
     const riskCategory = categorizeRisk(tenYearRiskPercent);
 
     let savedInputId = null;
     if (req.query.saveInput === 'true') {
-      // Save the input to the database
       const riskPredictorInput = new RiskPredictorInput(input);
       await riskPredictorInput.save();
       savedInputId = riskPredictorInput._id;
     }
+
 
     res.status(200).json({
       tenYearRiskPercent: tenYearRiskPercent,
