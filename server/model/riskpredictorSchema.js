@@ -3,18 +3,23 @@ const { Schema } = mongoose;
 
 const RiskPredictorSchema = new Schema(
   {
+    user:{
+      type:Schema.Types.ObjectId,
+      ref:"user",
+      required:true
+    },
     ageYears: {
       type: Number,
       required: true,
-      min: [40, 'Age must be between 40 and 79 for 10-year ASCVD risk'],
-      max: [79, 'Age must be between 40 and 79 for 10-year ASCVD risk'],
+      min: [10, 'Age must be between 40 and 79 for 10-year ASCVD risk'],
+      max: [90, 'Age must be between 40 and 79 for 10-year ASCVD risk'],
     },
     sex: {
       type: String,
       required: true,
       enum: ['male', 'female'],
     },
-        race: {
+      race: {
       type: String,
       required: true,
       enum: ['white', 'african_american'],

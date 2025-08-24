@@ -42,6 +42,7 @@ exports.reassessRisk = (req, res) => {
     res.status(200).json({
       previousTenYearRiskPercent: previousResult.tenYearRiskPercent,
       currentTenYearRiskPercent: currentResult.tenYearRiskPercent,
+      
       absoluteDelta: absoluteDelta,
       relativeDeltaPct: relativeDeltaPct,
     });
