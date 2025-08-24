@@ -1,6 +1,6 @@
 // controllers/riskPredictor.controller.js
 
-const { computeAscvdTenYearRisk, categorizeRisk } = require('../middleware/riskPredictor.middleware');
+const { computeAscvdTenYearRisk, categorizeRisk } = require('../middleware/riskPredictor');
 const RiskPredictorInput = require('../server/model/riskpredictorSchema');
 
 exports.estimateRisk = async (req, res) => {
