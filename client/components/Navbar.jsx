@@ -17,11 +17,11 @@ const Navbar = () => {
       {/* bar */}
       <div>
         <ul className="flex gap-6 font-medium text-gray-700">
-          <NavLink to="/" className="cursor-pointer hover:text-[#6366F1] hover:drop-shadow-[0_4px_6px_#6366F1] border-b-2 border-transparent hover:border-b-[#6366F1] hover:transition-all hover:ease-in-out">Home</NavLink>
+          <NavLink to="/home" className="cursor-pointer hover:text-[#6366F1] hover:drop-shadow-[0_4px_6px_#6366F1] border-b-2 border-transparent hover:border-b-[#6366F1] hover:transition-all hover:ease-in-out">Home</NavLink>
           <NavLink to="/riskform" className="cursor-pointer hover:text-[#6366F1] hover:drop-shadow-[0_4px_6px_#6366F1] border-b-2 border-transparent hover:border-b-[#6366F1] hover:transition-all hover:ease-in-out">Risk Check</NavLink>
           <NavLink to="/mindcare" className="cursor-pointer hover:text-[#6366F1] hover:drop-shadow-[0_4px_6px_#6366F1] border-b-2 border-transparent hover:border-b-[#6366F1] hover:transition-all hover:ease-in-out">MindCare</NavLink>
-          <NavLink className="cursor-pointer hover:text-[#6366F1] hover:drop-shadow-[0_4px_6px_#6366F1] border-b-2 border-transparent hover:border-b-[#6366F1] hover:transition-all hover:ease-in-out">Book Test</NavLink>
-          <NavLink className="cursor-pointer hover:text-[#6366F1] hover:drop-shadow-[0_4px_6px_#6366F1] border-b-2 border-transparent hover:border-b-[#6366F1] hover:transition-all hover:ease-in-out">Doctor</NavLink>
+          <NavLink to="/testbooking" className="cursor-pointer hover:text-[#6366F1] hover:drop-shadow-[0_4px_6px_#6366F1] border-b-2 border-transparent hover:border-b-[#6366F1] hover:transition-all hover:ease-in-out">Book Test</NavLink>
+          <NavLink to="/doctor" className="cursor-pointer hover:text-[#6366F1] hover:drop-shadow-[0_4px_6px_#6366F1] border-b-2 border-transparent hover:border-b-[#6366F1] hover:transition-all hover:ease-in-out">Doctor</NavLink>
 
         </ul>
       </div>

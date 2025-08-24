@@ -12,6 +12,10 @@ import Login from "../components/Login"
 import { useEffect } from "react";
 import UuidCard from "../components/UuidCard";
 import Footer from "../components/Footer";
+import TestBooking from "../components/TestBooking";
+import DoctorBooking from "../components/DoctorBooking";
+
+
 
 
 
@@ -80,6 +84,19 @@ function App() {
             }
           />
 
+           <Route path="/testbooking" element={<>
+            <Navbar />
+            <TestBooking />
+            <Footer/>
+           </>} />
+
+           <Route path="/doctor" element={
+            <>
+               <Navbar />
+              <DoctorBooking />
+              <Footer/>
+            </>
+           } />
           
         </Routes>
       </div>
