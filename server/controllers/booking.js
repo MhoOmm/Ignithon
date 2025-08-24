@@ -1,3 +1,4 @@
+require('dotenv').config();
 const User = require("../model/userSchema");
 const Doctor = require("../model/doctorschema");
 
@@ -7,8 +8,8 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "ommtripathi046@gmail.com", 
-    pass: "yvbn uwys swlu pxcx",     
+    user: process.env.NM_Id, 
+    pass: process.env.NM_Auth,     
   },
 });
 
@@ -39,7 +40,7 @@ const bookDoctor = async (req, res) => {
 
     // Mail to doctor
     const mailToDoctor = {
-      from: "ommtripathi046@gmail.com",
+      from: process.env.NM_Id,
       to: doctor.user.email,
       subject: `Appointment Request for ${doctor.user.fullName}`,
       html: `
