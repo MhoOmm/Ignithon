@@ -9,6 +9,8 @@ app.use(express.json())
 app.use(cookie_parser())
 
 app.use("/user",authRouter);
+const patientRoutes = require('./routes/patientRoutes');
+app.use("/patient", patientRoutes);
 
 
 const initCon = async()=>{
