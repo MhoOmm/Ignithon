@@ -3,11 +3,6 @@ const { Schema } = mongoose;
 
 const RiskPredictorSchema = new Schema(
   {
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
     ageYears: {
       type: Number,
       required: true,
@@ -18,6 +13,11 @@ const RiskPredictorSchema = new Schema(
       type: String,
       required: true,
       enum: ['male', 'female'],
+    },
+        race: {
+      type: String,
+      required: true,
+      enum: ['white', 'african_american'],
     },
     totalCholesterolMgDl: {
       type: Number,
