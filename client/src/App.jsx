@@ -5,6 +5,8 @@ import Navbar from '../components/Navbar';
 import Home from '../components/Home';
 import Register from "../components/Register";
 import ChatAi from "../components/ChatAi";
+import RiskPredictorForm from "../components/RiskForm";
+
 
 function App() {
   return (
@@ -32,6 +34,16 @@ function App() {
               <>
                 <Navbar />
                 <ChatAi />
+              </>
+            }
+          />
+
+          <Route
+            path="/riskform"
+            element={
+              <>
+                <Navbar />
+                <RiskPredictorForm />
               </>
             }
           />
