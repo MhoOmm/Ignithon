@@ -16,7 +16,7 @@ export default function RiskPredictorForm({ onSubmit }) {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/patient/problemchat",
+        "http://localhost:4000/patient/risk",
         data,
         {
           headers: { "Content-Type": "application/json" },
