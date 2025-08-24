@@ -33,7 +33,8 @@ const userSchema = new Schema({
     },
     phone: {
         type: Number,
-        default: null
+        required:true,
+        default: null,
     },
     dob:{
         type:String,
@@ -46,8 +47,7 @@ const userSchema = new Schema({
     }},
     barcodeIdentifier: {
         type: String,
-        required: true,
-        unique: true,
+        default: null
     }
 }, { timestamps: true });
 

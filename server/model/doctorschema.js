@@ -1,15 +1,13 @@
 const mongoose = require("mongoose")
 const {Schema} = mongoose
 const doctorSchema = new Schema({
-    userId:{
+    user:{
         type:Schema.Types.ObjectId,
         ref:"user",
         required:true
     },
-    specialization: { type: String, required: true },
-    yearsOfExperience: { type: Number, required: true },
-    bio: { type: String },
-    contactEmail: { type: String, required: true },
+    specialization: { type: String,default:"" },
+    bio: { type: String ,default:""},
     hospital:[
         {
             location:{
@@ -21,7 +19,8 @@ const doctorSchema = new Schema({
                 default:""
             }
         }
-    ]
-
-    
+    ]   
 })
+
+const Doctor = mongoose.model("Doctor",doctorSchema);
+module.exports = Doctor
