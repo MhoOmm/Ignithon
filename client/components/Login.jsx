@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axiosInstance from "../src/axiosConfig";
 import { useNavigate, NavLink } from "react-router-dom"; // import NavLink
 import Logo from "../src/assets/Logo.png";
 
@@ -12,11 +12,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     setLoginError(null);
     try {
-      const response = await axios.post(
-        "https://sanjeevni-backend.onrender.com/user/login",
-        data,
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const response = await axiosInstance.post("/user/login", data);
       //console.log("Login successful:", response.data);
 
       navigate("/home");

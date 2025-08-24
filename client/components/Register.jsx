@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axiosInstance from "../src/axiosConfig";
 import { useNavigate } from "react-router-dom"; // <-- import useNavigate
 import FancyButton from "./FancyButton";
 import Logo from "../src/assets/Logo.png";
@@ -22,15 +22,7 @@ const Register = () => {
   // Function to handle form submission
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        "https://sanjeevni-backend.onrender.com/user/register",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axiosInstance.post("/user/register", data);
       console.log("Server response:", response.data);
 
       // Redirect to /home after successful registration

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../src/axiosConfig";
 
 export default function DoctorBooking() {
   const [doctors, setDoctors] = useState([]);
@@ -10,9 +10,7 @@ export default function DoctorBooking() {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get("https://sanjeevni-backend.onrender.com/doctor/all", {
-          withCredentials: true,
-        });
+        const response = await axiosInstance.get("/doctor/all");
         setDoctors(response.data.doctors || []);
       } catch (err) {
         console.error("Error fetching doctors:", err);
