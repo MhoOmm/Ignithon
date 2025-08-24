@@ -7,4 +7,4 @@ You can view the working snapshots of the project here:
 ---
 ## Deployed Application
 The project is deployed and accessible at:  
-[**Live Application**]((https://sanjeevni-frontend-asef.onrender.com/))
+[**Live Application**](https://sanjeevni-frontend-asef.onrender.com/)
