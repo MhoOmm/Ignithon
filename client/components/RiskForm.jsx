@@ -7,6 +7,7 @@ import { NavLink } from "react-router";
 export default function RiskPredictorForm() {
   const [riskScore, setRiskScore] = useState(null);
   const [userData, setUserData] = useState(null); // store submitted form data
+  const [dietPlan, setDietPlan] = useState(null); // Store diet plan
 
   const {
     register,
@@ -24,13 +25,31 @@ export default function RiskPredictorForm() {
         data,
         { headers: { "Content-Type": "application/json" } }
       );
-      
 
       console.log("Server Response:", response.data);
       setRiskScore(response.data.tenYearRiskPercent); // store risk score
     } catch (err) {
       console.error("Error submitting form:", err);
       alert("❌ Failed to submit form");
+    }
+  };
+
+  const getDietPlan = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/patient/plan",
+        {
+          user_data: userData,
+          message: "Generate a diet plan based on my risk assessment.",
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log("Diet Plan Response:", response.data);
+      setDietPlan(response.data.dietPlan); // Store the diet plan
+    } catch (error) {
+      console.error("Error fetching diet plan:", error);
+      alert("❌ Failed to fetch diet plan");
     }
   };
 
@@ -167,12 +186,39 @@ export default function RiskPredictorForm() {
         <div className="mt-6 text-center">
           <div className="bg-white p-6 rounded-2xl shadow-lg">
             <h3 className="text-lg font-semibold">Predicted 10-Year Risk</h3>
-            <p className="text-2xl text-indigo-600 mt-2">{riskScore}%</p>
+            <p className="text-2xl text-indigo-600 mt-2">{riskScore ? riskScore.toFixed(2) : 0}%</p>
           </div>
-          
-          <NavLink to="/dietplan"><div className="mt-4">
-            <FancyButton label="Diet Plan" backgroundColor="black" text="white" />
-          </div></NavLink>
+
+          <button
+            onClick={getDietPlan}
+            className="w-full bg-green-500 text-white rounded-lg p-2 hover:bg-green-600 mt-4"
+          >
+            Get Diet Plan
+          </button>
+
+          {dietPlan && (
+            <div className="mt-4 bg-white p-4 rounded-2xl shadow-lg">
+              <h3 className="text-lg font-semibold">Diet Plan</h3>
+              {dietPlan.split(/\*\*Breakfast\*\*|\*\*Lunch\*\*|\*\*Dinner\*\*|\*\*Snacks \(choose 1-2\)\*\*/)
+                .filter(Boolean)
+                .map((section, index) => {
+                  const title = section.match(/^\s*([^\n]+)\s*\n/);
+                  const content = section.replace(/^\s*[^\n]+\s*\n/, "").trim();
+
+                  return (
+                    <div key={index} className="mb-4">
+                      {title && <h4 className="text-md font-semibold">{title[1]}</h4>}
+                      <ul className="list-disc list-inside">
+                        {content.split(". ")
+                          .map((item, itemIndex) => (
+                            <li key={itemIndex}>{item.trim()}</li>
+                          ))}
+                      </ul>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
         </div>
       )}
     </div>

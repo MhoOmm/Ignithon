@@ -49,6 +49,10 @@ exports.generateDietPlan = async (req, res) => {
                    to be culturally familiar while maintaining heart-healthy principles.
 
                 6. **Tone**: Always be supportive, encouraging, and non-judgmental.
+
+                --- Output Format ---
+                Present the diet plan guidelines as a list.
+                Use markdown formatting for lists.
             `,
         });
 
