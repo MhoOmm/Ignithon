@@ -10,6 +10,7 @@ app.use(express.json())
 app.use(cookie_parser())
 
 app.use("/user",authRouter);
+
 app.use("/patient",patientRouter)
 
 
