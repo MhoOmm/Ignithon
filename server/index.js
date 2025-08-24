@@ -9,15 +9,16 @@ const cors = require("cors")
 
 app.use(express.json())
 app.use(cookie_parser())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+}))
 
 app.use("/user",authRouter);
 
 app.use("/patient",patientRouter)
 
-app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
-}))
+
 
 const initCon = async()=>{
     try{
