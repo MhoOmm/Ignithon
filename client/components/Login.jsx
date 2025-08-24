@@ -13,7 +13,7 @@ const Login = () => {
     setLoginError(null);
     try {
       const response = await axios.post(
-        "http://localhost:4000/user/login",
+        "https://sanjeevni-backend.onrender.com/user/login",
         data,
         { headers: { "Content-Type": "application/json" } }
       );

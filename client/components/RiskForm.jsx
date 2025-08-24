@@ -21,7 +21,7 @@ export default function RiskPredictorForm() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/patient/risk",
+        "https://sanjeevni-backend.onrender.com/patient/risk",
         data,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -37,7 +37,7 @@ export default function RiskPredictorForm() {
   const getDietPlan = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/patient/plan",
+        "https://sanjeevni-backend.onrender.com/patient/plan",
         {
           user_data: userData,
           message: "Generate a diet plan based on my risk assessment.",

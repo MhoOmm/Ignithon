@@ -29,7 +29,7 @@ const ChatAi = () => {
     try {
       // Call backend API with single message string
       const response = await axios.post(
-        "http://localhost:4000/patient/mindcare",
+        "https://sanjeevni-backend.onrender.com/patient/mindcare",
         { message: data.message },
         {
           withCredentials: true,

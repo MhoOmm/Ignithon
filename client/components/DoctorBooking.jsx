@@ -10,7 +10,7 @@ export default function DoctorBooking() {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/doctor/all", {
+        const response = await axios.get("https://sanjeevni-backend.onrender.com/doctor/all", {
           withCredentials: true,
         });
         setDoctors(response.data.doctors || []);
@@ -26,7 +26,7 @@ export default function DoctorBooking() {
     setLoadingDoctorId(doctorId);
     try {
       const response = await axios.post(
-        `http://localhost:4000/doctor/book/${doctorId}`,
+        `https://sanjeevni-backend.onrender.com/doctor/book/${doctorId}`,
         {},
         { withCredentials: true }
       );

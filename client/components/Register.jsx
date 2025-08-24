@@ -22,7 +22,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/user/register",
+        "https://sanjeevni-backend.onrender.com/user/register",
         data,
         {
           headers: {
