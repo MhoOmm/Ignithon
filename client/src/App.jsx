@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Home from '../components/Home';
 import Register from "../components/Register";
+import ChatAi from "../components/ChatAi";
 
 function App() {
   return (
@@ -20,7 +21,20 @@ function App() {
               </>
             }
           />
-          <Route path="/signup" element={<Register/>} />
+
+          {/* Signup route */}
+          <Route path="/signup" element={<Register />} />
+
+          {/* Mindcare Chat route with Navbar */}
+          <Route
+            path="/mindcare"
+            element={
+              <>
+                <Navbar />
+                <ChatAi />
+              </>
+            }
+          />
         </Routes>
       </div>
     </Router>
