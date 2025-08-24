@@ -19,11 +19,6 @@ const RiskPredictorSchema = new Schema(
       required: true,
       enum: ['male', 'female'],
     },
-    race: {
-      type: String,
-      required: true,
-      enum: ['white', 'african_american', 'other'],
-    },
     totalCholesterolMgDl: {
       type: Number,
       required: true,
@@ -47,8 +42,6 @@ const RiskPredictorSchema = new Schema(
       type: Boolean,
       required: true,
     },
-
-
     diabetes: {
       type: Boolean, 
       required: true,
