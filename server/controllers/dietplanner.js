@@ -7,6 +7,7 @@ exports.generateDietPlan = async (req, res) => {
         const { user_data, message } = req.body;
 
         if (!user_data || !message) {
+
             let missingParams = [];
             if (!user_data) missingParams.push('user_data');
             if (!message) missingParams.push('message');
@@ -17,7 +18,10 @@ exports.generateDietPlan = async (req, res) => {
         }
 
         const model = genAI.getGenerativeModel({
+
             model: "gemini-1.5-flash",
+
+ 
             systemInstruction: `
                 You are an expert AI Nutrition Assistant. Your task is to generate a personalized, 
                 heart-healthy **1-day diet plan** based on user health data and risk assessment.
