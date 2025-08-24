@@ -1,7 +1,9 @@
 import React from 'react'
 import Logo from "../src/assets/Logo.png"   
 import { FiLogOut } from "react-icons/fi"
+import { FaAddressCard } from "react-icons/fa";
 import { NavLink } from 'react-router'
+
 
 const Navbar = () => {
   return (   
@@ -25,8 +27,10 @@ const Navbar = () => {
       </div>
       
       {/* logout */}
-      <div className="cursor-pointer text-red-500 hover:text-red-700 hover:drop-shadow-[0_4px_6px_#DE3E3E]">
-        <FiLogOut size={22} />
+      <div className="cursor-pointer text-red-500   flex gap-6">
+        
+        <NavLink to="/Uidcard"><FaAddressCard  size={25} className='hover:drop-shadow-[0_4px_6px_#DE3E3E] hover:text-red-700'/></NavLink>
+        <FiLogOut size={25}  className='hover:drop-shadow-[0_4px_6px_#DE3E3E] hover:text-red-700'/>
       </div>
 
     </div>

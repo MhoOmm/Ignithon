@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // import useNavigate
-import Logo from "../src/assets/Logo.png"; // make sure the path is correct
+import { useNavigate, NavLink } from "react-router-dom"; // import NavLink
+import Logo from "../src/assets/Logo.png";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [loginError, setLoginError] = useState(null);
-  const navigate = useNavigate(); // initialize navigate
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     setLoginError(null);
@@ -17,10 +17,9 @@ const Login = () => {
         data,
         { headers: { "Content-Type": "application/json" } }
       );
-      console.log("Login successful:", response.data);
+      //console.log("Login successful:", response.data);
 
-      // After login success, redirect to home page
-      navigate("/"); 
+      navigate("/home");
       
       // TODO: optionally save auth token etc. here
     } catch (error) {
@@ -93,6 +92,15 @@ const Login = () => {
             Login
           </button>
         </form>
+
+        <div className="mt-4 text-center">
+          <NavLink
+            to="/signup"
+            className="inline-block text-blue-600 hover:underline font-medium"
+          >
+            Don't have an account? Sign up
+          </NavLink>
+        </div>
       </div>
     </div>
   );

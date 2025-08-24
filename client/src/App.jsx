@@ -10,6 +10,10 @@ import DashboardChat from "../components/DashboardChat";
 import ChatDesc from "../components/ChatDesc";
 import Login from "../components/Login"
 import { useEffect } from "react";
+import UuidCard from "../components/UuidCard";
+import Footer from "../components/Footer";
+
+
 
 
 
@@ -24,13 +28,15 @@ function App() {
       <div className="h-screen w-full">
         <Routes>
           {/* Home route with Navbar */}
+          
           <Route
-            path="/"
+            path="/home"
             element={
               <>
                 <Navbar />
                 <Home />
                 <ChatDesc/>
+                <Footer/>
               </>
             }
           />
@@ -39,7 +45,7 @@ function App() {
           <Route path="/signup" element={<Register />} />
 
           {/* signin route */}
-          <Route path="/signin" element={<Login />} />
+          <Route path="/" element={<Login />} />
 
           {/* Mindcare Chat route with Navbar */}
           <Route
@@ -48,6 +54,7 @@ function App() {
               <>
                 <Navbar />
                 <ChatAi />
+                <Footer/>
               </>
             }
           />
@@ -58,9 +65,22 @@ function App() {
               <>
                 <Navbar />
                 <RiskPredictorForm />
+                <Footer/>
               </>
             }
           />
+
+          <Route
+            path="/Uidcard"
+            element={
+              <>
+                <UuidCard/>
+                <Footer/>
+              </>
+            }
+          />
+
+          
         </Routes>
       </div>
     </Router>
