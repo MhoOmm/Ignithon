@@ -8,10 +8,17 @@ import ChatAi from "../components/ChatAi";
 import RiskPredictorForm from "../components/RiskForm";
 import DashboardChat from "../components/DashboardChat";
 import ChatDesc from "../components/ChatDesc";
+import Login from "../components/Login"
+import { useEffect } from "react";
+
 
 
 
 function App() {
+   useEffect(() => {
+    // Scroll to top on page load
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Router>
       <div className="h-screen w-full">
@@ -30,6 +37,9 @@ function App() {
 
           {/* Signup route */}
           <Route path="/signup" element={<Register />} />
+
+          {/* signin route */}
+          <Route path="/signin" element={<Login />} />
 
           {/* Mindcare Chat route with Navbar */}
           <Route

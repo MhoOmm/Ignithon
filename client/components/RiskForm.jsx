@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import axios from "axios";
 import FancyButton from "./FancyButton";
+import { NavLink } from "react-router";
 
 export default function RiskPredictorForm() {
   const [riskScore, setRiskScore] = useState(null);
@@ -23,6 +24,7 @@ export default function RiskPredictorForm() {
         data,
         { headers: { "Content-Type": "application/json" } }
       );
+      
 
       console.log("Server Response:", response.data);
       setRiskScore(response.data.tenYearRiskPercent); // store risk score
@@ -167,9 +169,10 @@ export default function RiskPredictorForm() {
             <h3 className="text-lg font-semibold">Predicted 10-Year Risk</h3>
             <p className="text-2xl text-indigo-600 mt-2">{riskScore}%</p>
           </div>
-          <div className="mt-4">
+          
+          <NavLink to="/dietplan"><div className="mt-4">
             <FancyButton label="Diet Plan" backgroundColor="black" text="white" />
-          </div>
+          </div></NavLink>
         </div>
       )}
     </div>
