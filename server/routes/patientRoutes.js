@@ -1,13 +1,9 @@
 const User = require("../model/userSchema");
 const Doctor = require("../model/doctorschema");
-const riskPredictorController = require('../controllers/riskpredictor');
-const problemchat= require("../controllers/")
-
-
-
-
 const express  = require("express")
 const patientRouter = express.Router() ;
+const riskPredictorController = require('../controllers/riskpredictor');
+const {problemchat}= require("../controllers/problemChat")
 const {mentalHealthBuddy} = require("../controllers/mindcare")
 
 

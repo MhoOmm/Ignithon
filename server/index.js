@@ -5,6 +5,7 @@ const cookie_parser = require("cookie-parser")
 const main = require("./config/db")
 const authRouter = require("./routes/authRoutes")
 const patientRouter = require("./routes/patientRoutes")
+const cors = require("cors")
 
 app.use(express.json())
 app.use(cookie_parser())
