@@ -40,8 +40,8 @@ const PCE_COEFFICIENTS = {
         bAgeXLogTotalChol: 0.05
       },
       african_american: {
-        meanLP: 26.1234, // TODO: Replace with actual value
-        s0: 0.9144, // TODO: Replace with actual value
+        meanLP: 26.1234, // TODO: Replace with actual value - NEED TO BE UPDATED
+        s0: 0.9144, // TODO: Replace with actual value - NEED TO BE UPDATED
         bAge: 0.1,
         bLogTotalChol: 0.2,
         bLogHdlChol: -0.3,

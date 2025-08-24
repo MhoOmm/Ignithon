@@ -6,7 +6,9 @@ const riskPredictorController = require('../controllers/riskpredictor');
 const {problemchat}= require("../controllers/problemChat")
 const {mentalHealthBuddy} = require("../controllers/mindcare")
 
+const dietPlanController = require('../controllers/dietplanner');
 
+router.post('/plan', dietPlanController.generateDietPlan);
 
 patientRouter.post("/mindcare",mentalHealthBuddy);
 patientRouter.post('/risk', riskPredictorController.estimateRisk);
