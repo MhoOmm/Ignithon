@@ -21,7 +21,8 @@ exports.estimateRisk = async (req, res) => {
     }
 
     res.status(200).json({
-      tenYearRiskPercent: tenYearRiskPercent
+      tenYearRiskPercent: tenYearRiskPercent,
+      user_data: input
     });
   } catch (error) {
     console.error(error);
@@ -42,7 +43,6 @@ exports.reassessRisk = (req, res) => {
     res.status(200).json({
       previousTenYearRiskPercent: previousResult.tenYearRiskPercent,
       currentTenYearRiskPercent: currentResult.tenYearRiskPercent,
-      
       absoluteDelta: absoluteDelta,
       relativeDeltaPct: relativeDeltaPct,
     });
