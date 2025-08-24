@@ -45,7 +45,7 @@ export default function DoctorBooking() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-5xl mx-auto p-6 space-y-6">
       <h2 className="text-3xl font-bold text-center text-blue-700">
         Book a Doctor
       </h2>
@@ -73,25 +73,58 @@ export default function DoctorBooking() {
               key={doc._id}
               className="p-4 border rounded-lg shadow hover:shadow-lg transition"
             >
-              <h3 className="text-xl font-bold">{doc.user.fullName}</h3>
-              <p className="text-gray-600">
-                <b>Email:</b> {doc.user.email}
+              {/* Profile Photo */}
+              {doc.user?.profilePhotoUrl && (
+                <img
+                  src={doc.user.profilePhotoUrl}
+                  alt={doc.user.fullName}
+                  className="w-20 h-20 rounded-full mx-auto mb-3 object-cover"
+                />
+              )}
+
+              {/* User info */}
+              <h3 className="text-xl font-bold text-center">
+                {doc.user?.fullName || "Unknown Doctor"}
+              </h3>
+              <p className="text-gray-600 text-center">
+                <b>Email:</b> {doc.user?.email || "N/A"}
               </p>
-              <p className="text-gray-600">
-                <b>Role:</b> {doc.user.role}
+              <p className="text-gray-600 text-center">
+                <b>Role:</b> {doc.user?.role || "N/A"}
               </p>
+
+              {/* Doctor-specific info */}
+              <p className="text-gray-700 mt-2">
+                <b>Specialization:</b> {doc.specialization || "N/A"}
+              </p>
+              <p className="text-gray-700 mt-1">
+                <b>Bio:</b> {doc.bio || "N/A"}
+              </p>
+
+              {doc.hospital?.length > 0 && (
+                <div className="mt-2">
+                  <b>Hospital(s):</b>
+                  <ul className="list-disc ml-6">
+                    {doc.hospital.map((hosp, idx) => (
+                      <li key={idx}>
+                        {hosp.name || "N/A"} - {hosp.location || "N/A"}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Booking button */}
               <button
                 disabled={loadingDoctorId === doc._id}
-                className={`mt-3 w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 ${
+                className={`mt-4 w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 ${
                   loadingDoctorId === doc._id
                     ? "opacity-50 cursor-not-allowed"
                     : ""
                 }`}
                 onClick={() => handleBooking(doc._id)}
               >
-                {loadingDoctorId === doc._id
-                  ? "Booking..."
-                  : "Book Appointment"}
+                {loadingDoctorId === doc._id ? "Booking..." : "Book Appointment"}
               </button>
             </div>
           ))}
