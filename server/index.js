@@ -11,11 +11,11 @@ const cors = require("cors")
 app.use(express.json())
 app.use(cookie_parser())
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:"https://sanjeevni-frontend-asef.onrender.com",
     credentials:true
 }))
 
-app.use("/user",authRouter);
+app
 
 app.use("/patient",patientRouter)
 
