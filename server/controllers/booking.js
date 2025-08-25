@@ -16,15 +16,34 @@ const transporter = nodemailer.createTransport({
 
 const getAllDoctors = async (req, res) => {
   try {
-    const doctors = await Doctor.find().populate("user", "fullName email role");
+    const doctors = await Doctor.find({}, "specialization bio hospital") 
+      .populate("user", "fullName email role profilePhotoUrl phone dob location");
+
     res.status(200).json({ doctors });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Error fetching doctors", error: err.message });
   }
 };
 
+
 const bookDoctor = async (req, res) => {
   try {
+    const token =
+          req.cookies?.token || req.headers.authorization?.split(" ")[1];
+    
+        if (!token) {
+          return res.status(401).json({ message: "No token provided" });
+        }
+        const decoded = jwt.verify(
+          token,
+          "d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959"
+        );
+        req.user = {
+          id: decoded._id,
+          email: decoded.email,
+          role: decoded.role,
+        };
     const patientId = req.user.id;
     const { doctorId } = req.params;
     const patient = await User.findById(patientId);

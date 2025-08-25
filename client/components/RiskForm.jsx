@@ -35,24 +35,24 @@ export default function RiskForm() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(
-        "http://localhost:4000/patient/risk",
-        formData
-      );
-      setRiskResult(res.data);
-    } catch (err) {
-      console.error("Error calculating risk:", err.response?.data || err.message);
-    }
-  };
-  const [dietPlan, setDietPlan] = useState(null);
-
-  const getDietPlan = async () => {
+const handleSubmit = async (e) => {
+  e.preventDefault();
   try {
     const response = await axios.post(
-      "http://localhost:4000/patient/plan",  // switched to http
+      "http://localhost:4000/patient/risk", // or your deployed URL
+      formData,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    setRiskResult(response.data);
+  } catch (err) {
+    console.error("Error calculating risk:", err.response?.data || err.message);
+  }
+};
+
+const getDietPlan = async () => {
+  try {
+    const response = await axios.post(
+      "http://localhost:4000/patient/plan", // or your deployed URL
       {
         user_data: formData,
         message: "Generate a diet plan based on my risk assessment.",
@@ -61,12 +61,13 @@ export default function RiskForm() {
     );
 
     console.log("Diet Plan Response:", response.data);
-    setDietPlan(response.data.dietPlan || response.data); 
+    setDietPlan(response.data.dietPlan || response.data);
   } catch (error) {
     console.error("Error fetching diet plan:", error.response?.data || error.message);
     alert("❌ Failed to fetch diet plan");
   }
 };
+
 
 
   const COLORS = ["#e74c3c", "#2ecc71"]; // Risk = red, Safe = green

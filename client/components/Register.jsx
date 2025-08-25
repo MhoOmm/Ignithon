@@ -24,16 +24,15 @@ const Register = () => {
       const response = await axios.post(
         "http://localhost:4000/user/register",
         data,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
 
       if (response.status === 200 || response.data.success) {
         navigate("/home");
       }
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error("Error registering user:", error.response?.data || error.message);
+      alert("❌ Registration failed");
     }
   };
 
@@ -99,9 +98,7 @@ const Register = () => {
 
         {/* Date of Birth */}
         <div className="flex flex-col mb-4">
-          <label className="text-gray-700 font-medium mb-1">
-            Date of Birth
-          </label>
+          <label className="text-gray-700 font-medium mb-1">Date of Birth</label>
           <input
             type="date"
             {...register("dob")}
