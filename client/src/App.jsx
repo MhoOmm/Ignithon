@@ -19,13 +19,16 @@ import DoctorBooking from "../components/DoctorBooking";
 
 
 
-
-
-
 function App() {
    useEffect(() => {
     // Scroll to top on page load
     window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
+    // Disable automatic scroll restoration
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
   }, []);
   return (
     <Router>

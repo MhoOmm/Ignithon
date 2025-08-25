@@ -65,4 +65,3 @@ const RiskPredictorSchema = new Schema(
 );
 
 module.exports = mongoose.model('RiskPredictorInput', RiskPredictorSchema);
-
