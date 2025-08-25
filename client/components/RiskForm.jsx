@@ -65,24 +65,39 @@ const handleSubmit = async (e) => {
 
 const getDietPlan = async () => {
   try {
+    if (!riskResult) {
+      setError("Please calculate your risk assessment first.");
+      return;
+    }
     setError(null);
+    
     const response = await axiosInstance.post("/patient/plan", {
       user_data: {
         ...formData,
         ageYears: Number(formData.ageYears),
         totalCholesterolMgDl: Number(formData.totalCholesterolMgDl),
         hdlCholesterolMgDl: Number(formData.hdlCholesterolMgDl),
-        systolicBpMmHg: Number(formData.systolicBpMmHg)
+        systolicBpMmHg: Number(formData.systolicBpMmHg),
+        risk: riskResult.risk // Include risk percentage
       },
-      message: "Generate a diet plan based on my risk assessment.",
-      risk: riskResult?.risk
+      message: `Generate a personalized diet plan based on my heart risk assessment of ${riskResult.risk}%.`
     });
 
-    console.log("Diet Plan Response:", response.data);
-    setDietPlan(response.data.dietPlan || response.data);
+    if (!response.data || (!response.data.dietPlan && typeof response.data !== 'string')) {
+      throw new Error('Invalid diet plan response format');
+    }
+    
+    const planText = response.data.dietPlan || response.data;
+    if (typeof planText !== 'string' || planText.trim() === '') {
+      throw new Error('Empty diet plan received');
+    }
+    
+    setDietPlan(planText);
+    setError(null);
   } catch (error) {
-    console.error("Error fetching diet plan:", error.response?.data || error.message);
-    alert("❌ Failed to fetch diet plan");
+    console.error("Error fetching diet plan:", error);
+    setError(error.response?.data?.message || error.message || "Failed to fetch diet plan. Please try again.");
+    setDietPlan(null);
   }
 };
 
@@ -270,41 +285,43 @@ const getDietPlan = async () => {
             {/* Diet Plan Result */}
 {dietPlan && (
   <div className="mt-6 bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl shadow-lg text-left border border-indigo-100">
-    <h3 className=" hover:drop-shadow-[0_4px_6px_#6366F1] text-2xl font-bold mb-4 text-center bg-gradient-to-r from-black to-[#6366f1] bg-clip-text text-transparent">
+    <h3 className="hover:drop-shadow-[0_4px_6px_#6366F1] text-2xl font-bold mb-4 text-center bg-gradient-to-r from-black to-[#6366f1] bg-clip-text text-transparent">
       Your Personalized Diet Plan
     </h3>
 
-    {dietPlan
-      .split(
-        /\*\*Breakfast\*\*|\*\*Lunch\*\*|\*\*Dinner\*\*|\*\*Snacks \(choose 1-2\)\*\*/
-      )
+    {dietPlan.split(/\*\*([^*]+)\*\*/)
       .filter(Boolean)
+      .reduce((acc, item, index, array) => {
+        if (index % 2 === 0) return acc; // Skip even indices (content)
+        const content = array[index + 1] || '';
+        acc.push({ title: item, content });
+        return acc;
+      }, [])
       .map((section, index) => {
-        const title = section.match(/^\s*([^\n]+)\s*\n/);
-        const content = section.replace(/^\s*[^\n]+\s*\n/, "").trim();
+        if (!section.title || !section.content) return null;
+        
+        const items = section.content
+          .split(/\n|\./)
+          .map(item => item.trim())
+          .filter(item => item.length > 0);
 
         return (
           <div
             key={index}
             className="mb-6 p-4 rounded-xl bg-white shadow-sm border border-gray-100 hover:shadow-md transition duration-200"
           >
-            {title && (
-              <h4 className="text-lg font-semibold text-[#6366f1] mb-2">
-                {title[1]}
-              </h4>
-            )}
+            <h4 className="text-lg font-semibold text-[#6366f1] mb-2">
+              {section.title}
+            </h4>
             <ul className="list-disc list-inside space-y-2 text-gray-700 leading-relaxed">
-              {content
-                .split(". ")
-                .filter((item) => item.trim() !== "")
-                .map((item, itemIndex) => (
-                  <li
-                    key={itemIndex}
-                    className="pl-2 before:content-['🥗'] before:mr-2 before:text-[#6366f1]"
-                  >
-                    {item.trim()}
-                  </li>
-                ))}
+              {items.map((item, itemIndex) => (
+                <li
+                  key={itemIndex}
+                  className="pl-2 before:content-['🥗'] before:mr-2 before:text-[#6366f1]"
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
         );
