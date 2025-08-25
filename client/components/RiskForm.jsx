@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import axiosInstance from "../src/axiosConfig";
 import FancyButton from "../components/FancyButton"
 import {
   PieChart,
@@ -26,6 +27,8 @@ export default function RiskForm() {
   
 
   const [riskResult, setRiskResult] = useState(null);
+  const [dietPlan, setDietPlan] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -37,40 +40,43 @@ export default function RiskForm() {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  setError(null);
   try {
-    const response = await axios.post(
-      "https://sanjeevni-backend.onrender.com/patient/risk",
-      formData,
-      { 
-        withCredentials: true,
-        headers: { 
-          "Content-Type": "application/json",
-          "Origin": "https://sanjeevni-frontend-asef.onrender.com"
-        } 
-      }
-    );
-    setRiskResult(response.data);
+    // Convert string values to numbers
+    const numericFormData = {
+      ...formData,
+      ageYears: Number(formData.ageYears),
+      totalCholesterolMgDl: Number(formData.totalCholesterolMgDl),
+      hdlCholesterolMgDl: Number(formData.hdlCholesterolMgDl),
+      systolicBpMmHg: Number(formData.systolicBpMmHg)
+    };
+
+    const response = await axiosInstance.post("/patient/risk", numericFormData);
+    if (response.data && response.data.risk) {
+      setRiskResult(response.data);
+    } else {
+      throw new Error('Invalid response format');
+    }
   } catch (err) {
-    console.error("Error calculating risk:", err.response?.data || err.message);
+    console.error("Error calculating risk:", err);
+    setError(err.response?.data?.message || "Failed to calculate risk. Please try again.");
   }
 };
 
 const getDietPlan = async () => {
   try {
-    const response = await axios.post(
-      "https://sanjeevni-backend.onrender.com/patient/plan",
-      {
-        user_data: formData,
-        message: "Generate a diet plan based on my risk assessment.",
+    setError(null);
+    const response = await axiosInstance.post("/patient/plan", {
+      user_data: {
+        ...formData,
+        ageYears: Number(formData.ageYears),
+        totalCholesterolMgDl: Number(formData.totalCholesterolMgDl),
+        hdlCholesterolMgDl: Number(formData.hdlCholesterolMgDl),
+        systolicBpMmHg: Number(formData.systolicBpMmHg)
       },
-      { 
-        withCredentials: true,
-        headers: { 
-          "Content-Type": "application/json",
-          "Origin": "https://sanjeevni-frontend-asef.onrender.com"
-        } 
-      }
-    );
+      message: "Generate a diet plan based on my risk assessment.",
+      risk: riskResult?.risk
+    });
 
     console.log("Diet Plan Response:", response.data);
     setDietPlan(response.data.dietPlan || response.data);
@@ -241,16 +247,24 @@ const getDietPlan = async () => {
               </ResponsiveContainer>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div className="mt-4 text-red-600 bg-red-50 p-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
             {/* Diet Plan Button */}
             <div className="col-span-2 flex justify-center mt-4">
-          <FancyButton
-            label="Get Personalized Diet Plan"
-            backgroundColor="#6366f1"
-            text="white"
-            color="black"
-            type="submit"
-          />
-        </div>
+              <FancyButton
+                label="Get Personalized Diet Plan"
+                backgroundColor="#6366f1"
+                text="white"
+                color="black"
+                onClick={getDietPlan}
+                type="button"
+              />
+            </div>
 
             {/* Diet Plan Result */}
             {/* Diet Plan Result */}

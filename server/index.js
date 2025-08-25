@@ -42,12 +42,25 @@ const initCon = async () => {
         console.log("Connected to DB");
         
         const PORT = process.env.PORT || 4000;
-        app.listen(PORT, () => {
+        const server = app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server running at port: ${PORT}`);
         });
+
+        // Handle server errors
+        server.on('error', (error) => {
+            console.error('Server Error:', error);
+            process.exit(1);
+        });
+
+        // Handle unhandled rejections
+        process.on('unhandledRejection', (error) => {
+            console.error('Unhandled Rejection:', error);
+            process.exit(1);
+        });
+
     } catch (error) {
         console.error("MongoDB Connection Error:", error);
-        process.exit(1); // Exit if DB connection fails
+        process.exit(1);
     }
 };
 
