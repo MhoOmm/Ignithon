@@ -39,9 +39,15 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   try {
     const response = await axios.post(
-      "http://localhost:4000/patient/risk", // or your deployed URL
+      "https://sanjeevni-backend.onrender.com/patient/risk",
       formData,
-      { headers: { "Content-Type": "application/json" } }
+      { 
+        withCredentials: true,
+        headers: { 
+          "Content-Type": "application/json",
+          "Origin": "https://sanjeevni-frontend-asef.onrender.com"
+        } 
+      }
     );
     setRiskResult(response.data);
   } catch (err) {
@@ -52,12 +58,18 @@ const handleSubmit = async (e) => {
 const getDietPlan = async () => {
   try {
     const response = await axios.post(
-      "http://localhost:4000/patient/plan", // or your deployed URL
+      "https://sanjeevni-backend.onrender.com/patient/plan",
       {
         user_data: formData,
         message: "Generate a diet plan based on my risk assessment.",
       },
-      { headers: { "Content-Type": "application/json" } }
+      { 
+        withCredentials: true,
+        headers: { 
+          "Content-Type": "application/json",
+          "Origin": "https://sanjeevni-frontend-asef.onrender.com"
+        } 
+      }
     );
 
     console.log("Diet Plan Response:", response.data);

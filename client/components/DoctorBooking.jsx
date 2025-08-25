@@ -23,10 +23,9 @@ export default function DoctorBooking() {
   const handleBooking = async (doctorId) => {
     setLoadingDoctorId(doctorId);
     try {
-      const response = await axios.post(
-        `https://sanjeevni-backend.onrender.com/doctor/book/${doctorId}`,
-        {},
-        { withCredentials: true }
+      const response = await axiosInstance.post(
+        `/doctor/book/${doctorId}`,
+        {}
       );
       setBookingResult(
         response.data.message || "✅ Appointment booked successfully!"

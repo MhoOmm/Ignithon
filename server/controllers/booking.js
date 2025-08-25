@@ -1,15 +1,20 @@
 require('dotenv').config();
 const User = require("../model/userSchema");
 const Doctor = require("../model/doctorschema");
-
+const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
+
+// Verify environment variables
+if (!process.env.NM_Id || !process.env.NM_Auth) {
+  console.error('Warning: Email configuration is missing. Please set NM_Id and NM_Auth environment variables.');
+}
 
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.NM_Id, 
-    pass: process.env.NM_Auth,     
+    user: "ommtripathi046@gmail.com",
+    pass: "yvbn uwys swlu pxcx",
   },
 });
 
@@ -29,16 +34,22 @@ const getAllDoctors = async (req, res) => {
 
 const bookDoctor = async (req, res) => {
   try {
-    const token =
-          req.cookies?.token || req.headers.authorization?.split(" ")[1];
-    
-        if (!token) {
-          return res.status(401).json({ message: "No token provided" });
-        }
-        const decoded = jwt.verify(
-          token,
-          "d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959"
-        );
+    // 1. Token Verification
+    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "Authentication required. Please login." });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(
+        token,
+        "d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959"
+      );
+    } catch (jwtError) {
+      console.error('JWT Verification failed:', jwtError);
+      return res.status(401).json({ message: "Invalid or expired token. Please login again." });
+    }
         req.user = {
           id: decoded._id,
           email: decoded.email,
@@ -59,7 +70,7 @@ const bookDoctor = async (req, res) => {
 
     // Mail to doctor
     const mailToDoctor = {
-      from: process.env.NM_Id,
+      from: "ommtripathi046@gmail.com",
       to: doctor.user.email,
       subject: `Appointment Request for ${doctor.user.fullName}`,
       html: `

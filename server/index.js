@@ -10,7 +10,7 @@ const patientRouter = require("./routes/patientRoutes");
 const bookRouter = require("./routes/bookingRoutes");
 const errorHandler = require('./middleware/errorHandler');
 
-// Middleware
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
