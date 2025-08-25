@@ -1,7 +1,6 @@
 const User = require("../model/userSchema");
-const Doctor  = require("../model/doctorschema")
+const Doctor = require("../model/doctorschema");
 const bcrypt = require("bcrypt");
-
 const validate = require("../utils/validate");
 const jwt = require("jsonwebtoken");
 
@@ -18,7 +17,13 @@ const register = async (req,res)=>{
         const user= await User.create(req.body)
 
         const token =jwt.sign({_id:user._id,email:email,role:role},"d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959",{expiresIn:3600})
-        res.cookie("token",token,{maxAge:60*60*1000})
+        res.cookie("token", token, {
+            maxAge: 60 * 60 * 1000,
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            domain: '.onrender.com'
+        });
 
         if (role === "doctor") {
             await Doctor.create({
@@ -63,8 +68,18 @@ const login = async (req,res)=>{
             throw new Error("Invalid Credentials");
         }
 
-        const token = jwt.sign({_id:user._id,email:email,role:user.role},"d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959",{expiresIn:3600})
-        res.cookie("token",token,{maxAge:60*60*1000});
+        const token = jwt.sign(
+          {_id:user._id,email:email,role:user.role},
+          process.env.JWT_SECRET || "d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959",
+          {expiresIn:3600}
+        )
+        res.cookie("token", token, {
+            maxAge: 60*60*1000,
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            domain: '.onrender.com'
+        });
         const reply = {
             fullName:user.fullName,
             userName:user.userName,
@@ -89,9 +104,12 @@ const login = async (req,res)=>{
 const logout = async (req, res) => {
   try {  
     res.cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(0),
-    });
+            httpOnly: true,
+            expires: new Date(0),
+            secure: true,
+            sameSite: 'none',
+            domain: '.onrender.com'
+        });
 
     res.status(200).send("Logged out Successfully");
   } catch (err) {
