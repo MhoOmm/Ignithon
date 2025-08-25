@@ -21,11 +21,7 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:4000/user/register",
-        data,
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const response = await axiosInstance.post("/user/register", data);
 
       if (response.status === 200 || response.data.success) {
         navigate("/home");

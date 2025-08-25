@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios"; // or use axiosInstance if configured
+import axiosInstance from "../src/axiosConfig";
 import { useNavigate, NavLink } from "react-router-dom";
 import Logo from "../src/assets/Logo.png";
 
@@ -13,11 +13,7 @@ const Login = () => {
     setLoginError(null);
     try {
       // Use either axios or axiosInstance depending on your config
-      const response = await axios.post(
-        "http://localhost:4000/user/login",
-        data,
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const response = await axiosInstance.post("/user/login", data);
 
       console.log("Login successful:", response.data);
       navigate("/home");
