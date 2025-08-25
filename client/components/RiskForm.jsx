@@ -1,7 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import axiosInstance from "../src/axiosConfig";
-import FancyButton from "../components/FancyButton"
+import FancyButton from "./FancyButton"
 import {
   PieChart,
   Pie,
@@ -69,34 +68,59 @@ const getDietPlan = async () => {
       setError("Please calculate your risk assessment first.");
       return;
     }
-    setError(null);
-    
-    const response = await axiosInstance.post("/patient/plan", {
+
+    // Clear previous state and show loading
+    setError("Generating your personalized diet plan...");
+    setDietPlan(null);
+
+    // Prepare user data with all necessary information
+    const dietPlanRequest = {
       user_data: {
         ...formData,
         ageYears: Number(formData.ageYears),
         totalCholesterolMgDl: Number(formData.totalCholesterolMgDl),
         hdlCholesterolMgDl: Number(formData.hdlCholesterolMgDl),
         systolicBpMmHg: Number(formData.systolicBpMmHg),
-        risk: riskResult.risk // Include risk percentage
+        risk: riskResult.risk,
+        conditions: {
+          diabetes: formData.diabetes,
+          hypertension: formData.onHypertensionTreatment,
+          smoking: formData.currentSmoker
+        }
       },
-      message: `Generate a personalized diet plan based on my heart risk assessment of ${riskResult.risk}%.`
-    });
+      message: `Generate a detailed diet plan for a ${formData.ageYears}-year-old ${formData.sex} with ${riskResult.risk}% heart risk. 
+                Health factors: Total Cholesterol ${formData.totalCholesterolMgDl}mg/dL, HDL ${formData.hdlCholesterolMgDl}mg/dL, 
+                Blood Pressure ${formData.systolicBpMmHg}mmHg. 
+                ${formData.diabetes ? 'Has diabetes. ' : ''}
+                ${formData.onHypertensionTreatment ? 'On hypertension treatment. ' : ''}
+                ${formData.currentSmoker ? 'Current smoker.' : ''}`
+    };
 
-    if (!response.data || (!response.data.dietPlan && typeof response.data !== 'string')) {
-      throw new Error('Invalid diet plan response format');
-    }
+    const response = await axiosInstance.post("/patient/plan", dietPlanRequest);
+
+    // Validate and process response
+    const planText = response.data?.dietPlan || response.data;
     
-    const planText = response.data.dietPlan || response.data;
-    if (typeof planText !== 'string' || planText.trim() === '') {
-      throw new Error('Empty diet plan received');
+    if (!planText || typeof planText !== 'string') {
+      throw new Error('Invalid diet plan format received');
     }
-    
+
+    // Ensure the plan has the required sections
+    const requiredSections = ['Introduction', 'Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+    const hasSections = requiredSections.every(section => 
+      planText.includes(`**${section}**`)
+    );
+
+    if (!hasSections) {
+      throw new Error('Diet plan is missing required sections');
+    }
+
     setDietPlan(planText);
     setError(null);
+
   } catch (error) {
-    console.error("Error fetching diet plan:", error);
-    setError(error.response?.data?.message || error.message || "Failed to fetch diet plan. Please try again.");
+    console.error("Diet plan error:", error);
+    setError(error.response?.data?.message || error.message || "Failed to generate diet plan. Please try again.");
     setDietPlan(null);
   }
 };
@@ -150,7 +174,7 @@ const getDietPlan = async () => {
             className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
           >
             <option value="white">White</option>
-            <option value="black">Black</option>
+            <option value="african_american">Black / African American</option>
           </select>
 
           <input
@@ -285,54 +309,57 @@ const getDietPlan = async () => {
             {/* Diet Plan Result */}
 {dietPlan && (
   <div className="mt-6 bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl shadow-lg text-left border border-indigo-100">
-    <h3 className="hover:drop-shadow-[0_4px_6px_#6366F1] text-2xl font-bold mb-4 text-center bg-gradient-to-r from-black to-[#6366f1] bg-clip-text text-transparent">
+    <h3 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-black to-[#6366f1] bg-clip-text text-transparent">
       Your Personalized Diet Plan
     </h3>
+    
+    <div className="space-y-6">
+      {dietPlan
+        .split(/\*\*([^*]+)\*\*/)
+        .filter((_, index) => index % 2 === 1) // Get only section titles
+        .map((sectionTitle) => {
+          const sectionPattern = new RegExp(`\\*\\*${sectionTitle}\\*\\*([^*]+)`);
+          const match = dietPlan.match(sectionPattern);
+          const content = match ? match[1].trim() : '';
 
-    {dietPlan.split(/\*\*([^*]+)\*\*/)
-      .filter(Boolean)
-      .reduce((acc, item, index, array) => {
-        if (index % 2 === 0) return acc; // Skip even indices (content)
-        const content = array[index + 1] || '';
-        acc.push({ title: item, content });
-        return acc;
-      }, [])
-      .map((section, index) => {
-        if (!section.title || !section.content) return null;
-        
-        const items = section.content
-          .split(/\n|\./)
-          .map(item => item.trim())
-          .filter(item => item.length > 0);
+          if (!content) return null;
 
-        return (
-          <div
-            key={index}
-            className="mb-6 p-4 rounded-xl bg-white shadow-sm border border-gray-100 hover:shadow-md transition duration-200"
-          >
-            <h4 className="text-lg font-semibold text-[#6366f1] mb-2">
-              {section.title}
-            </h4>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 leading-relaxed">
-              {items.map((item, itemIndex) => (
-                <li
-                  key={itemIndex}
-                  className="pl-2 before:content-['🥗'] before:mr-2 before:text-[#6366f1]"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      })}
-  </div>
-)}
-
-          </div>
-        )}
-
-      </div>
+          return (
+            <div key={sectionTitle} className="p-4 rounded-xl bg-white shadow-sm border border-gray-100 hover:shadow-md transition duration-200">
+              <h4 className="text-lg font-bold text-[#6366f1] mb-4">
+                {sectionTitle}
+              </h4>
+              <div className="text-gray-700 leading-relaxed space-y-3">
+                {content
+                  .split('\n')
+                  .filter(line => line.trim())
+                  .map((line, index) => (
+                    <div key={index} className="flex items-start">
+                      <span className="mr-3 text-[#6366f1] text-lg">•</span>
+                      <span className="flex-1">{line.trim()}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          );
+        })}
     </div>
-  );
+    
+    {/* Add a close button */}
+    <div className="mt-6 flex justify-center">
+      <button
+        onClick={() => setDietPlan(null)}
+        className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 underline"
+      >
+        Close Diet Plan
+      </button>
+    </div>
+                  {/* single close button above */}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
 }

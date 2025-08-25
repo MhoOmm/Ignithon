@@ -57,16 +57,29 @@ exports.generateDietPlan = async (req, res) => {
         });
 
         const prompt = `
-            Here is the user's health data:
+            Based on this health data:
             ${JSON.stringify(user_data, null, 2)}
 
-            Here is the user's request:
-            "${message}"
+            ${message}
 
-            Please generate the diet plan in **separate, well-structured paragraphs**.
+            Format the response exactly as follows:
+            **Introduction**
+            A brief personalized introduction based on the user's risk factors.
+
+            **Breakfast**
+            List breakfast options here.
+
+            **Lunch**
+            List lunch options here.
+
+            **Dinner**
+            List dinner options here.
+
+            **Snacks**
+            List healthy snack options here.
         `;
 
-        const result = await model.generateContent(prompt);
+    const result = await model.generateContent(prompt);
         const output = await result.response.text();
 
         res.status(200).json({ dietPlan: output });
