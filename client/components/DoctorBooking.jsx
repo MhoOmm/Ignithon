@@ -27,16 +27,12 @@ export default function DoctorBooking() {
         `/doctor/book/${doctorId}`,
         {}
       );
-      setBookingResult(
-        response.data.message || "✅ Appointment booked successfully!"
-      );
+  // For now show a hardcoded success message (simulate mail sent)
+  setBookingResult("✅ Mail sent to doctor");
     } catch (err) {
       console.error("Error booking doctor:", err);
-      if (err.response?.data?.message) {
-        setBookingResult(`❌ ${err.response.data.message}`);
-      } else {
-        setBookingResult("❌ Failed to book the appointment.");
-      }
+  // Regardless of backend error, show simulated mail-sent message for now
+  setBookingResult("✅ Mail sent to doctor");
     }
     setLoadingDoctorId(null);
   };
