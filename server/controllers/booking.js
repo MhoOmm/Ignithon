@@ -9,13 +9,22 @@ if (!process.env.NM_Id || !process.env.NM_Auth) {
   console.error('Warning: Email configuration is missing. Please set NM_Id and NM_Auth environment variables.');
 }
 
-// Nodemailer transporter
+// Nodemailer transporter (hardcoded for now)
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "ommtripathi046@gmail.com",
     pass: "yvbn uwys swlu pxcx",
   },
+});
+
+// Verify transporter on startup and log result
+transporter.verify((err, success) => {
+  if (err) {
+    console.error('Nodemailer verification failed:', err);
+  } else {
+    console.log('Nodemailer transporter ready');
+  }
 });
 
 
@@ -88,9 +97,14 @@ const bookDoctor = async (req, res) => {
       `,
     };
 
-    await transporter.sendMail(mailToDoctor);
-
-    res.status(200).json({ message: "Appointment request sent to doctor successfully!" });
+    try {
+      const info = await transporter.sendMail(mailToDoctor);
+      console.log('Email sent:', info);
+      res.status(200).json({ message: "Appointment request sent to doctor successfully!", info });
+    } catch (mailErr) {
+      console.error('Failed to send email to doctor:', mailErr);
+      return res.status(500).json({ message: 'Appointment created but failed to notify doctor by email', error: mailErr.message });
+    }
 
   } catch (err) {
     console.error("Error booking doctor:", err);

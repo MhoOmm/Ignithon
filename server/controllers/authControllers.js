@@ -16,14 +16,21 @@ const register = async (req,res)=>{
 
         const user= await User.create(req.body)
 
-        const token =jwt.sign({_id:user._id,email:email,role:role},"d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959",{expiresIn:3600})
-        res.cookie("token", token, {
-            maxAge: 60 * 60 * 1000,
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            domain: '.onrender.com'
-        });
+                const token = jwt.sign(
+                    { _id: user._id, email: email, role: role },
+                    process.env.JWT_SECRET || "d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959",
+                    { expiresIn: 3600 }
+                );
+
+                // For local/hardcoded testing: set permissive cookie options so browser stores the token
+                const cookieOptions = {
+                    maxAge: 60 * 60 * 1000,
+                    httpOnly: true,
+                    secure: false, // not using HTTPS locally
+                    sameSite: 'lax',
+                };
+                // Do NOT set domain here so cookie works on localhost during development
+                res.cookie("token", token, cookieOptions);
 
         if (role === "doctor") {
             await Doctor.create({
@@ -68,18 +75,20 @@ const login = async (req,res)=>{
             throw new Error("Invalid Credentials");
         }
 
-        const token = jwt.sign(
-          {_id:user._id,email:email,role:user.role},
-          process.env.JWT_SECRET || "d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959",
-          {expiresIn:3600}
-        )
-        res.cookie("token", token, {
-            maxAge: 60*60*1000,
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            domain: '.onrender.com'
-        });
+                const token = jwt.sign(
+                    { _id: user._id, email: email, role: user.role },
+                    process.env.JWT_SECRET || "d9cc6805b6757f777411cede9009e0a8ffb6f3589855903b83fa714361690959",
+                    { expiresIn: 3600 }
+                );
+
+                // Permissive cookie for testing
+                const cookieOptionsLogin = {
+                    maxAge: 60 * 60 * 1000,
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'lax',
+                };
+                res.cookie("token", token, cookieOptionsLogin);
         const reply = {
             fullName:user.fullName,
             userName:user.userName,
@@ -103,13 +112,13 @@ const login = async (req,res)=>{
 
 const logout = async (req, res) => {
   try {  
-    res.cookie("token", "", {
+        const logoutCookieOptions = {
             httpOnly: true,
             expires: new Date(0),
-            secure: true,
-            sameSite: 'none',
-            domain: '.onrender.com'
-        });
+            secure: false,
+            sameSite: 'lax',
+        };
+        res.cookie("token", "", logoutCookieOptions);
 
     res.status(200).send("Logged out Successfully");
   } catch (err) {

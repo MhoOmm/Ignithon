@@ -13,8 +13,26 @@ const errorHandler = require('./middleware/errorHandler');
 
 app.use(express.json());
 app.use(cookieParser());
+// CORS: allow production frontend and localhost during development
+const allowedOrigins = [
+  'https://sanjeevni-frontend-asef.onrender.com',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+];
+
 app.use(cors({
-    origin: "https://sanjeevni-frontend-asef.onrender.com",
+    origin: function(origin, callback){
+        // allow REST clients or same-origin requests with no origin
+        if(!origin) return callback(null, true);
+        if(allowedOrigins.indexOf(origin) !== -1){
+            callback(null, true);
+        } else {
+            console.warn('Blocked CORS request from origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Origin', 'X-Requested-With', 'Accept'],
