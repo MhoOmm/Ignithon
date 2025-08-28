@@ -16,7 +16,7 @@ const Footer = () => {
                 <a href="#" className="hover:text-indigo-400 transition-colors">About Us</a>
               </li>
               <li>
-                <a href="#" className="hover:text-indigo-400 transition-colors">Careers</a>
+                <a href="#" className="hover:text-indigo-400 transition-colors">Be a Supporter</a>
               </li>
             </ul>
           </div>
