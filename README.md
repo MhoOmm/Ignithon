@@ -1,5 +1,6 @@
 # Sanjeevani
 This project was developed as part of the **K1000 organized hackathon "Ignithon"**
+**Results:-Runner Up in Intermediate Category
 ---
 ## Working Snapshots
 You can view the working snapshots of the project here:  
