@@ -3,7 +3,7 @@ This project was developed as part of the **K1000 organized hackathon "Ignithon"
 **Results:-Runner Up in Intermediate Category
 ---
 ## Working Snapshots
-You can view the working snapshots of the project here:  
+You can view the working snapshots of the project  here:  
 [**Working Snapshots**](https://drive.google.com/drive/folders/1M_oKj9hECnQ8CQQ9Q5eWJKzsQjlJWfv2?usp=drive_link)
 ---
 ## Deployed Application
