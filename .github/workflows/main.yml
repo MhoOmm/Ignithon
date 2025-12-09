@@ -1,0 +1,14 @@
+name: Keep Render Active
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Runs every 10 minutes
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Ping Frontend
+        run: |
+          curl -I https://rap-guess-game.onrender.com
